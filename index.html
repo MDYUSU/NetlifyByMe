@@ -216,17 +216,32 @@
 
     <!-- Templates: hidden snippet content -->
     <template id="s1">
-      int led[] = {2, 3, 4, 5, 6}; void setup() { for (int i = 0; i < 5; i++) {
-      pinMode(led[i], OUTPUT); } } void loop() { for (int i = 0; i < 5; i++) {
-      for (int j = 0; j < 5; j++) { digitalWrite(led[j], LOW); }
-      digitalWrite(led[i], HIGH); delay(1000); } for (int i = 4; i >= 0; i--) {
-      for (int j = 0; j < 5; j++) { digitalWrite(led[j], LOW); }
-      digitalWrite(led[i], HIGH); delay(1000); } }
-    </template>
+      int led[] = {2, 3, 4, 5, 6};
 
-    <template id="s2"
-      ># Python: simple sum def total(a, b): return a + b print(total(3,
-      4))</template
+void setup() {
+  for (int i = 0; i < 5; i++) {
+    pinMode(led[i], OUTPUT);
+  }
+}
+
+void loop() {
+  for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+      digitalWrite(led[j], LOW);
+    }
+    digitalWrite(led[i], HIGH);
+    delay(1000);
+  }
+
+  for (int i = 4; i >= 0; i--) {
+    for (int j = 0; j < 5; j++) {
+      digitalWrite(led[j], LOW);
+    }
+    digitalWrite(led[i], HIGH);
+    delay(1000);
+  }
+}
+      </template
     >
 
     <template id="s3"
