@@ -1,214 +1,373 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Copy Blocks — Template Snippets Demo</title>
-<style>
-  :root{font-family:system-ui,Arial,Segoe UI,Helvetica;--bg:#f6f7fb;--card:#fff}
-  body{margin:0;background:var(--bg);padding:36px;display:flex;flex-direction:column;align-items:center}
-  h1{margin:0 0 12px}
-  p.lead{margin:4px 0 22px;color:#444}
-  .grid{display:flex;flex-wrap:wrap;gap:12px;max-width:900px;justify-content:center}
-  .block{
-    min-width:82px;padding:18px 20px;border-radius:10px;background:var(--card);
-    box-shadow:0 4px 14px rgba(0,0,0,.06);cursor:pointer;user-select:none;text-align:center;
-    transition:transform .12s ease, box-shadow .12s; outline: none;
-  }
-  .block:focus{box-shadow:0 6px 18px rgba(0,0,0,.12); transform: translateY(-2px);}
-  .block:active{transform:translateY(1px)}
-  .toast{height:22px;margin-top:16px;color: #0b6623; font-weight:600}
-  .preview{margin-top:18px; width:90%; max-width:900px; background:#fff; padding:12px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.04); display:none;}
-  .preview header{display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .preview pre{white-space:pre-wrap; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:13px; margin:8px 0 0}
-  .btn { background:#0b66ff;color:#fff;border:none;padding:8px 10px;border-radius:8px; cursor:pointer; font-weight:600 }
-  .btn.ghost { background:transparent;color:#0b66ff;border:1px solid rgba(11,102,255,.12) }
-  footer{margin-top:28px;color:#666;font-size:13px}
-  .warn { color:#b33; font-weight:700 }
-</style>
-</head>
-<body>
-  <!-- <h1>Tap a block to copy the program</h1>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Copy Blocks — Template Snippets Demo</title>
+    <style>
+      :root {
+        font-family: system-ui, Arial, Segoe UI, Helvetica;
+        --bg: #f6f7fb;
+        --card: #fff;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        padding: 36px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      h1 {
+        margin: 0 0 12px;
+      }
+      p.lead {
+        margin: 4px 0 22px;
+        color: #444;
+      }
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        max-width: 900px;
+        justify-content: center;
+      }
+      .block {
+        min-width: 82px;
+        padding: 18px 20px;
+        border-radius: 10px;
+        background: var(--card);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+        cursor: pointer;
+        user-select: none;
+        text-align: center;
+        transition: transform 0.12s ease, box-shadow 0.12s;
+        outline: none;
+      }
+      .block:focus {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+      }
+      .block:active {
+        transform: translateY(1px);
+      }
+      .toast {
+        height: 22px;
+        margin-top: 16px;
+        color: #0b6623;
+        font-weight: 600;
+      }
+      .preview {
+        margin-top: 18px;
+        width: 90%;
+        max-width: 900px;
+        background: #fff;
+        padding: 12px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        display: none;
+      }
+      .preview header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .preview pre {
+        white-space: pre-wrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13px;
+        margin: 8px 0 0;
+      }
+      .btn {
+        background: #0b66ff;
+        color: #fff;
+        border: none;
+        padding: 8px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .btn.ghost {
+        background: transparent;
+        color: #0b66ff;
+        border: 1px solid rgba(11, 102, 255, 0.12);
+      }
+      footer {
+        margin-top: 28px;
+        color: #666;
+        font-size: 13px;
+      }
+      .warn {
+        color: #b33;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h1>Tap a block to copy the program</h1>
   <p class="lead">Click a number to copy the hidden snippet to your clipboard. Double-click to preview before copying.</p> -->
 
-  <div class="grid" id="grid" role="list">
-    <div class="block" role="listitem" tabindex="0" data-snippet="s1" aria-label="Copy snippet 1">1</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s2" aria-label="Copy snippet 2">2</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s3" aria-label="Copy snippet 3">3</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s4" aria-label="Copy snippet 4">4</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s5" aria-label="Copy snippet 5">5</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s6" aria-label="Copy snippet 6">6</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s7" aria-label="Copy snippet 7">7</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s8" aria-label="Copy snippet 8">8</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s9" aria-label="Copy snippet 9">9</div>
-    <div class="block" role="listitem" tabindex="0" data-snippet="s10" aria-label="Copy snippet 10">10</div>
-  </div>
-<!-- 
+    <div class="grid" id="grid" role="list">
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s1"
+        aria-label="Copy snippet 1"
+      >
+        1
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s2"
+        aria-label="Copy snippet 2"
+      >
+        2
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s3"
+        aria-label="Copy snippet 3"
+      >
+        3
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s4"
+        aria-label="Copy snippet 4"
+      >
+        4
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s5"
+        aria-label="Copy snippet 5"
+      >
+        5
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s6"
+        aria-label="Copy snippet 6"
+      >
+        6
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s7"
+        aria-label="Copy snippet 7"
+      >
+        7
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s8"
+        aria-label="Copy snippet 8"
+      >
+        8
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s9"
+        aria-label="Copy snippet 9"
+      >
+        9
+      </div>
+      <div
+        class="block"
+        role="listitem"
+        tabindex="0"
+        data-snippet="s10"
+        aria-label="Copy snippet 10"
+      >
+        10
+      </div>
+    </div>
+    <!-- 
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div> -->
 
-  <div class="preview" id="preview" aria-hidden="true">
-    <header>
-      <strong>Preview</strong>
-      <div>
-        <button id="copyPreview" class="btn">Copy preview</button>
-        <button id="closePreview" class="btn ghost">Close</button>
-      </div>
-    </header>
-    <pre id="previewCode" tabindex="0"></pre>
-  </div>
+    <div class="preview" id="preview" aria-hidden="true">
+      <header>
+        <strong>Preview</strong>
+        <div>
+          <button id="copyPreview" class="btn">Copy preview</button>
+          <button id="closePreview" class="btn ghost">Close</button>
+        </div>
+      </header>
+      <pre id="previewCode" tabindex="0"></pre>
+    </div>
 
-  <!-- Templates: hidden snippet content -->
-  <template id="s1">// JS example: greet
-function greet(name) {
-  return `Hello, ${name}!`;
-}
-console.log(greet('World'));</template>
+    <!-- Templates: hidden snippet content -->
+    <template id="s1">
+      int led[] = {2, 3, 4, 5, 6}; void setup() { for (int i = 0; i < 5; i++) {
+      pinMode(led[i], OUTPUT); } } void loop() { for (int i = 0; i < 5; i++) {
+      for (int j = 0; j < 5; j++) { digitalWrite(led[j], LOW); }
+      digitalWrite(led[i], HIGH); delay(1000); } for (int i = 4; i >= 0; i--) {
+      for (int j = 0; j < 5; j++) { digitalWrite(led[j], LOW); }
+      digitalWrite(led[i], HIGH); delay(1000); } }
+    </template>
 
-  <template id="s2"># Python: simple sum
-def total(a, b):
-    return a + b
+    <template id="s2"
+      ># Python: simple sum def total(a, b): return a + b print(total(3,
+      4))</template
+    >
 
-print(total(3, 4))</template>
+    <template id="s3"
+      >/* HTML snippet: basic structure */
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <title>Page</title>
+        </head>
+        <body>
+          <h1>Hello</h1>
+        </body>
+      </html></template
+    >
 
-  <template id="s3">/* HTML snippet: basic structure */
-<!doctype html>
-<html>
-  <head><meta charset="utf-8"><title>Page</title></head>
-  <body><h1>Hello</h1></body>
-</html></template>
+    <template id="s4"># Bash: list files (safe) ls -la</template>
 
-  <template id="s4"># Bash: list files (safe)
-ls -la</template>
+    <template id="s5"
+      >// CSS: centered container .container{ max-width:900px; margin:0 auto;
+      padding:20px; }</template
+    >
 
-  <template id="s5">// CSS: centered container
-.container{
-  max-width:900px;
-  margin:0 auto;
-  padding:20px;
-}</template>
+    <template id="s6"
+      ># SQL: select example SELECT id, name, created_at FROM users WHERE active
+      = 1 ORDER BY created_at DESC;</template
+    >
 
-  <template id="s6"># SQL: select example
-SELECT id, name, created_at
-FROM users
-WHERE active = 1
-ORDER BY created_at DESC;</template>
+    <template id="s7"
+      >// Node: simple HTTP server (Node.js) const http = require('http');
+      http.createServer((req, res) => { res.writeHead(200, {'Content-Type':
+      'text/plain'}); res.end('ok'); }).listen(3000);</template
+    >
 
-  <template id="s7">// Node: simple HTTP server (Node.js)
-const http = require('http');
-http.createServer((req, res) => {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('ok');
-}).listen(3000);</template>
+    <template id="s8"
+      ># Python: fibonacci (small) def fib(n): a,b = 0,1 for _ in range(n): a,b
+      = b, a+b return a print(fib(10))</template
+    >
 
-  <template id="s8"># Python: fibonacci (small)
-def fib(n):
-    a,b = 0,1
-    for _ in range(n):
-        a,b = b, a+b
-    return a
-print(fib(10))</template>
+    <template id="s9"
+      >// JS: fetch example (browser) fetch('/api/data') .then(r => r.json())
+      .then(console.log) .catch(console.error);</template
+    >
 
-  <template id="s9">// JS: fetch example (browser)
-fetch('/api/data')
-  .then(r => r.json())
-  .then(console.log)
-  .catch(console.error);</template>
+    <template id="s10">hello how r u </template>
 
-  <template id="s10">hello how r u </template>
+    <script>
+      /* Helpers and main logic */
+      const grid = document.getElementById("grid");
+      const toast = document.getElementById("toast");
+      const previewEl = document.getElementById("preview");
+      const previewCode = document.getElementById("previewCode");
+      const copyPreviewBtn = document.getElementById("copyPreview");
+      const closePreviewBtn = document.getElementById("closePreview");
 
-<script>
-/* Helpers and main logic */
-const grid = document.getElementById('grid');
-const toast = document.getElementById('toast');
-const previewEl = document.getElementById('preview');
-const previewCode = document.getElementById('previewCode');
-const copyPreviewBtn = document.getElementById('copyPreview');
-const closePreviewBtn = document.getElementById('closePreview');
+      // function showToast(text, ms = 1500) {
+      //   toast.textContent = text;
+      //   setTimeout(() => { if (toast.textContent === text) toast.textContent = ''; }, ms);
+      // }
 
-// function showToast(text, ms = 1500) {
-//   toast.textContent = text;
-//   setTimeout(() => { if (toast.textContent === text) toast.textContent = ''; }, ms);
-// }
-
-/* simple dangerous-pattern detection */
-function looksDangerous(code) {
-  if (!code) return false;
-  const patterns = [
-    /(^|\s)rm\s+-rf\s+/i,
-    /(^|\s)sudo\s+/i,
-    /curl\s+\S+\s*\|\s*sh/i,
-    /dd\s+if=/i,
-    /:>\s*\/dev\/null/i
-  ];
-  return patterns.some(rx => rx.test(code));
-}
-
-async function copyText(text) {
-  try {
-    if (!text) {
-      showToast('Nothing to copy');
-      return;
-    }
-
-    // If snippet looks dangerous ask user to confirm explicitly
-    if (looksDangerous(text)) {
-      const ok = confirm('This snippet appears to contain potentially dangerous shell commands. Are you sure you want to copy it to clipboard?');
-      if (!ok) {
-        showToast('Copy cancelled');
-        return;
+      /* simple dangerous-pattern detection */
+      function looksDangerous(code) {
+        if (!code) return false;
+        const patterns = [
+          /(^|\s)rm\s+-rf\s+/i,
+          /(^|\s)sudo\s+/i,
+          /curl\s+\S+\s*\|\s*sh/i,
+          /dd\s+if=/i,
+          /:>\s*\/dev\/null/i,
+        ];
+        return patterns.some((rx) => rx.test(code));
       }
-    }
 
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(text);
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      ta.remove();
-    }
-    // showToast('Copied ✓');
-  } catch (err) {
-    console.error('copy failed', err);
-    showToast('Copy failed');
-  }
-}
+      async function copyText(text) {
+        try {
+          if (!text) {
+            showToast("Nothing to copy");
+            return;
+          }
 
-/* Get snippet content by template id */
-function getSnippetById(id) {
-  const tpl = document.getElementById(id);
-  if (!tpl) return '';
-  // .content.textContent preserves line breaks
-  return tpl.content.textContent.trim();
-}
+          // If snippet looks dangerous ask user to confirm explicitly
+          if (looksDangerous(text)) {
+            const ok = confirm(
+              "This snippet appears to contain potentially dangerous shell commands. Are you sure you want to copy it to clipboard?"
+            );
+            if (!ok) {
+              showToast("Copy cancelled");
+              return;
+            }
+          }
 
-/* Click handler: copy snippet */
-grid.addEventListener('click', (ev) => {
-  const block = ev.target.closest('.block');
-  if (!block) return;
-  const tplId = block.dataset.snippet;
-  const code = tplId ? getSnippetById(tplId) : (block.dataset.code ?? '');
-  copyText(code);
-});
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.left = "-9999px";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            ta.remove();
+          }
+          // showToast('Copied ✓');
+        } catch (err) {
+          console.error("copy failed", err);
+          showToast("Copy failed");
+        }
+      }
 
-/* Keyboard accessibility: Enter or Space copies */
-grid.addEventListener('keydown', (ev) => {
-  if (ev.key === 'Enter' || ev.key === ' ') {
-    const block = ev.target.closest('.block');
-    if (!block) return;
-    ev.preventDefault();
-    const tplId = block.dataset.snippet;
-    const code = tplId ? getSnippetById(tplId) : (block.dataset.code ?? '');
-    copyText(code);
-  }
-});
+      /* Get snippet content by template id */
+      function getSnippetById(id) {
+        const tpl = document.getElementById(id);
+        if (!tpl) return "";
+        // .content.textContent preserves line breaks
+        return tpl.content.textContent.trim();
+      }
 
-/* Double-click to preview (mobile: use long-press? but dblclick is common on desktop) */
-/*grid.addEventListener('dblclick', (ev) => {
+      /* Click handler: copy snippet */
+      grid.addEventListener("click", (ev) => {
+        const block = ev.target.closest(".block");
+        if (!block) return;
+        const tplId = block.dataset.snippet;
+        const code = tplId ? getSnippetById(tplId) : block.dataset.code ?? "";
+        copyText(code);
+      });
+
+      /* Keyboard accessibility: Enter or Space copies */
+      grid.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          const block = ev.target.closest(".block");
+          if (!block) return;
+          ev.preventDefault();
+          const tplId = block.dataset.snippet;
+          const code = tplId ? getSnippetById(tplId) : block.dataset.code ?? "";
+          copyText(code);
+        }
+      });
+
+      /* Double-click to preview (mobile: use long-press? but dblclick is common on desktop) */
+      /*grid.addEventListener('dblclick', (ev) => {
   const block = ev.target.closest('.block');
   if (!block) return;
   const tplId = block.dataset.snippet;
@@ -220,29 +379,29 @@ grid.addEventListener('keydown', (ev) => {
   previewCode.focus();
 });*/
 
-/* Preview copy button */
-copyPreviewBtn.addEventListener('click', () => {
-  const code = previewCode.textContent;
-  copyText(code);
-});
+      /* Preview copy button */
+      copyPreviewBtn.addEventListener("click", () => {
+        const code = previewCode.textContent;
+        copyText(code);
+      });
 
-/* Close preview */
-closePreviewBtn.addEventListener('click', () => {
-  previewEl.style.display = 'none';
-  previewEl.setAttribute('aria-hidden', 'true');
-});
+      /* Close preview */
+      closePreviewBtn.addEventListener("click", () => {
+        previewEl.style.display = "none";
+        previewEl.setAttribute("aria-hidden", "true");
+      });
 
-/* Close preview on Escape key */
-document.addEventListener('keydown', (ev) => {
-  if (ev.key === 'Escape' && previewEl.style.display === 'block') {
-    previewEl.style.display = 'none';
-    previewEl.setAttribute('aria-hidden', 'true');
-  }
-});
-</script>
+      /* Close preview on Escape key */
+      document.addEventListener("keydown", (ev) => {
+        if (ev.key === "Escape" && previewEl.style.display === "block") {
+          previewEl.style.display = "none";
+          previewEl.setAttribute("aria-hidden", "true");
+        }
+      });
+    </script>
 
-<footer>
-  <!-- Tip: double-click a block to preview before copying. Dangerous-looking shell snippets will ask for confirmation. <span class="warn">Always inspect before running copied commands.</span> -->
-</footer>
-</body>
+    <footer>
+      <!-- Tip: double-click a block to preview before copying. Dangerous-looking shell snippets will ask for confirmation. <span class="warn">Always inspect before running copied commands.</span> -->
+    </footer>
+  </body>
 </html>
