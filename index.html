@@ -27,9 +27,8 @@
     <div class="block" role="listitem" tabindex="0" data-snippet="s8" aria-label="Copy snippet 8">8</div>
     <div class="block" role="listitem" tabindex="0" data-snippet="s9" aria-label="Copy snippet 9">9</div>
     <div class="block" role="listitem" tabindex="0" data-snippet="s10" aria-label="Copy snippet 10">10</div>
-  </div>
-
-  <!-- Templates (must start at column 0, no leading spaces) -->
+    <div class="block" role="listitem" tabindex="0" data-snippet="s11" aria-label="Copy snippet 11">11</div>
+    <div class="block" role="listitem" tabindex="0" data-snippet="s12" aria-label="Copy snippet 12">12</div>
 <template id="s1">
 int led[] = {2, 3, 4, 5, 6};
 
@@ -40,6 +39,7 @@ void setup() {
 }
 
 void loop() {
+  // Forward loop
   for (int i = 0; i < 5; i++) {
     for (int j = 0; j < 5; j++) {
       digitalWrite(led[j], LOW);
@@ -48,6 +48,7 @@ void loop() {
     delay(1000);
   }
 
+  // Backward loop
   for (int i = 4; i >= 0; i--) {
     for (int j = 0; j < 5; j++) {
       digitalWrite(led[j], LOW);
@@ -81,46 +82,102 @@ void loop() {
 </template>
 
 <template id="s3">
-<!doctype html>
-<html>
-  <head><meta charset="utf-8"><title>Page</title></head>
-  <body><h1>Hello</h1></body>
-</html>
-</template>
+#define PIEZO_PIN 9
+const int trigger = 6;
+const int echo = 7;
+const int soundPin = A0;
 
-<template id="s4">
-int Smoke_Sensor = 0;
+float distance;
+float dist_inches;
+
+const float DIST_THRESHOLD = 5.0;
+const int SOUND_THRESHOLD = 520;
 
 void setup() {
-  pinMode(A0, INPUT);
   Serial.begin(9600);
-  pinMode(5, OUTPUT);
-  pinMode(7, OUTPUT);
+  pinMode(trigger, OUTPUT);
+  pinMode(echo, INPUT);
+  pinMode(PIEZO_PIN, OUTPUT);
 }
 
 void loop() {
-  Smoke_Sensor = analogRead(A0);
-  Serial.println(Smoke_Sensor);
+  digitalWrite(trigger, LOW);
+  delayMicroseconds(5);
 
-  // First threshold check (>= 600)
-  if (Smoke_Sensor >= 600) {
-    digitalWrite(5, HIGH);
-  } else {
-    digitalWrite(5, LOW);
+  digitalWrite(trigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigger, LOW);
+
+  distance = pulseIn(echo, HIGH);
+
+  distance = distance * 0.0001657;
+  dist_inches = distance * 39.37;
+
+  int soundValue = analogRead(soundPin);
+
+  if (dist_inches < DIST_THRESHOLD && soundValue > SOUND_THRESHOLD) {
+    tone(PIEZO_PIN, 1500);
+    delay(200);
+    noTone(PIEZO_PIN);
+    Serial.print("Intrusion Detected! Object with sound at distance: ");
+    Serial.print(dist_inches);
+    Serial.println(" in");
+  } 
+  else if (dist_inches < DIST_THRESHOLD) {
+    Serial.print("Object detected at distance: ");
+    Serial.print(dist_inches);
+    Serial.println(" in");
+  } 
+  else if (soundValue > SOUND_THRESHOLD) {
+    Serial.println("Sound detected!");
+  } 
+  else {
+    Serial.println("No intrusion detected.");
   }
+  delay(200);
+}
+</template>
 
-  // Second threshold check (>= 700)
-  if (Smoke_Sensor >= 700) {
-    digitalWrite(7, HIGH);
-  } else {
-    digitalWrite(7, LOW);
-  }
+<template id="s4">
+void setup() {
+  pinMode(11, OUTPUT);
+}
 
-  delay(10);
+void loop() {
+  digitalWrite(11, HIGH);
+  delay(1000);
+  digitalWrite(11, LOW);
+  delay(1000);
 }
 </template>
 
 <template id="s5">
+int ldr1 = 0;
+
+void setup() {
+  pinMode(2, INPUT);   // Sensor connected to Pin 2
+  pinMode(5, OUTPUT);  // LED/Output connected to Pin 5
+  Serial.begin(9600);
+}
+
+void loop() {
+  ldr1 = digitalRead(2);
+
+  if (ldr1 == HIGH) {
+    digitalWrite(5, HIGH); // Turn LED ON
+  } 
+  else {
+    digitalWrite(5, LOW);  // Turn LED OFF
+  }
+
+  Serial.print("Intensity: ");
+  Serial.println(ldr1);    // Changed to println so it doesn't pile up on one line
+  
+  delay(100); // Added a small delay to make the screen readable
+}
+</template>
+
+<template id="s6">
 const int sensorPin = A0; 
 const int ledPin = 13; 
 int SensorValue = 0;
@@ -158,41 +215,191 @@ void loop() {
 }
 </template>
 
-<template id="s6">
-# SQL example
-SELECT id, name FROM users WHERE active = 1;
-</template>
-
-<template id="s7">
+<!-- <template id="s7">
 // Node: simple HTTP server (Node.js)
 const http = require('http');
 http.createServer((req, res) => {
   res.writeHead(200, {'Content-Type':'text/plain'});
   res.end('ok');
 }).listen(3000);
-</template>
+</template> -->
 
 <template id="s8">
-# Python fibonacci
-def fib(n):
-    a,b = 0,1
-    for _ in range(n):
-        a,b = b, a+b
-    return a
-print(fib(10))
+int Smoke_Sensor = 0;
+
+void setup() {
+  pinMode(A0, INPUT);
+  Serial.begin(9600);
+  pinMode(5, OUTPUT);
+  pinMode(7, OUTPUT);
+}
+
+void loop() {
+  Smoke_Sensor = analogRead(A0);
+  Serial.println(Smoke_Sensor);
+
+  // First threshold check (>= 600)
+  if (Smoke_Sensor >= 600) {
+    digitalWrite(5, HIGH);
+  } else {
+    digitalWrite(5, LOW);
+  }
+
+  // Second threshold check (>= 700)
+  if (Smoke_Sensor >= 700) {
+    digitalWrite(7, HIGH);
+  } else {
+    digitalWrite(7, LOW);
+  }
+
+  delay(10);
+}
 </template>
 
 <template id="s9">
-// JS fetch example
-fetch('/api/data')
-  .then(r => r.json())
-  .then(console.log)
-  .catch(console.error);
-</template>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <DHT.h>
 
+// --- Screen Settings ---
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+// --- Sensor Settings ---
+#define DHTPIN 4        // Digital pin connected to the DHT sensor
+#define DHTTYPE DHT11   // Type of sensor
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(9600); // Standard speed
+  dht.begin();
+
+  // Initialize the OLED Screen
+  // Address 0x3C is standard for 128x64 screens
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+  
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.display();
+  delay(2000); // Pause to let screen and sensor start up
+}
+
+void loop() {
+  delay(2000); // Wait a few seconds between measurements
+
+  // Read temperature and humidity
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  // Check if any reads failed
+  if (isnan(h) || isnan(t)) {
+    Serial.println(F("Failed to read from DHT sensor!"));
+    return;
+  }
+
+  // --- Update OLED Screen ---
+  display.clearDisplay();
+
+  // 1. Display Temperature
+  display.setTextSize(1);
+  display.setCursor(0, 0);
+  display.print("Temperature");
+  
+  display.setTextSize(2);
+  display.setCursor(0, 10);
+  display.print(t);
+  display.write(167); // Prints the degree symbol (°)
+  display.print("C");
+
+  // 2. Display Humidity
+  display.setTextSize(1);
+  display.setCursor(0, 35);
+  display.print("Humidity"); 
+  
+  display.setTextSize(2);
+  display.setCursor(0, 45);
+  display.print(h);
+  display.print("%");
+
+  display.display(); // Push everything to the screen
+
+  // --- Print to Computer (Serial) ---
+  Serial.print("Temperature: ");
+  Serial.print(t);
+  Serial.print(" | Humidity: ");
+  Serial.println(h);
+}
+</template>
+<!-- 
 <template id="s10">
 # Note
 This is a harmless text snippet. Replace with your code.
+</template> -->
+
+<template id="s11">
+#define TRIG 9
+#define ECHO 10
+
+long duration;
+float distance;
+float tankDepth = 150;
+float waterLevel;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT);
+}
+
+void loop() {
+  digitalWrite(TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG, LOW);
+  duration = pulseIn(ECHO, HIGH);
+  distance = duration * 0.034 / 2;
+  Serial.println(distance);
+}  
+</template>
+
+<template id="s12">
+#include <Keypad.h>
+
+const byte ROWS = 4;
+const byte COLS = 4;
+
+char keys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+
+byte rowPins[ROWS] = {9, 8, 7, 6};
+byte colPins[COLS] = {5, 4, 3, 2};
+
+Keypad keypd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Keypad Test - Press keys");
+}
+
+void loop() {
+  char key = keypd.getKey();
+  
+  if (key) {
+    Serial.print("Key pressed: ");
+    Serial.println(key);
+  }
+}
 </template>
 
   <script>
