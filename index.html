@@ -89,16 +89,72 @@ void loop() {
 </template>
 
 <template id="s4">
-# Bash: list files (safe)
-ls -la
+int Smoke_Sensor = 0;
+
+void setup() {
+  pinMode(A0, INPUT);
+  Serial.begin(9600);
+  pinMode(5, OUTPUT);
+  pinMode(7, OUTPUT);
+}
+
+void loop() {
+  Smoke_Sensor = analogRead(A0);
+  Serial.println(Smoke_Sensor);
+
+  // First threshold check (>= 600)
+  if (Smoke_Sensor >= 600) {
+    digitalWrite(5, HIGH);
+  } else {
+    digitalWrite(5, LOW);
+  }
+
+  // Second threshold check (>= 700)
+  if (Smoke_Sensor >= 700) {
+    digitalWrite(7, HIGH);
+  } else {
+    digitalWrite(7, LOW);
+  }
+
+  delay(10);
+}
 </template>
 
 <template id="s5">
-/* CSS center container */
-.container{
-  max-width:900px;
-  margin:0 auto;
-  padding:20px;
+const int sensorPin = A0; 
+const int ledPin = 13; 
+int SensorValue = 0;
+int threshold = 500;
+int dry = 800;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  SensorValue = analogRead(sensorPin);
+  
+  Serial.print("Soil moisture sensor Value: ");
+  Serial.println(SensorValue);
+
+  // Check if soil is wet (High value)
+  if (SensorValue >= dry) {
+    digitalWrite(ledPin, HIGH);
+    Serial.println("Soil is wet");
+  }
+  // Check if soil is moderate
+  else if (SensorValue >= threshold && SensorValue < dry) {
+    digitalWrite(ledPin, LOW);
+    Serial.println("Soil is moderate");
+  }
+  // Otherwise, soil is dry
+  else {
+    digitalWrite(ledPin, LOW);
+    Serial.println("Soil is dry");
+  }
+
+  delay(1000);
 }
 </template>
 
